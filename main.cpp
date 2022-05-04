@@ -247,7 +247,7 @@ int main()
       cout << "Enter End" << endl;
       getline(cin, EndCity);
       int endCityToInt = city[EndCity];
-      int x = 139;
+      int x = 10;
       canfly(startCity, EndCity, x);
       // fromAtoB(startCityToInt, endCityToInt);
     }
@@ -267,7 +267,7 @@ int main()
       cout << "city C" << endl;
       getline(cin, cityC);
       int endCityToInt = city[cityB];
-      int x = 139;
+      int x = 10;
      // canfly(startCity, EndCity, x);
       canfly(startCity, cityB, x);
       canfly(cityB, cityC, x);
@@ -297,7 +297,7 @@ int main()
       cout << "Enter Destination" << endl;
       getline(cin, EndCity);
       int endCityToInt = city[cityB];
-      int x = 139;
+      int x = 10;
      // canfly(startCity, EndCity, x);
       canfly(cityA, EndCity, x);
       canfly(cityB, EndCity, x);
