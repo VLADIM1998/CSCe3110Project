@@ -6,16 +6,131 @@
 #include <fstream>
 #include <map>
 #include <regex>
+#include <list>
 
 using namespace std;
 
-// Cole Schlotz Code here
+#define MAX_NODES 140
 
-// END
+// Global data structures to store city data
 int adj[140][140];
 map<const string, int> city;
 vector<string> testCity;
 vector<string> connectedFlight;
+
+// Cole Schlotz Code here
+
+/*  void BFS(int from, int to)
+ *
+ *   By Cole Stoltz
+ *  
+ *   Parameters: int, int, int[]
+ *
+ *   Takes in 2 nodes. Calculates the least amount of connections
+ *   from city A to B. Stores path inside of a path array.
+ *
+ *   Uses a breadth first search
+ *   
+ *   Returns: the minimum path a to the destination.
+ */
+bool BFS(int A, int B, int path[MAX_NODES]) {
+
+  // Lists
+  bool visited[MAX_NODES];
+  list < int > queue;
+
+  for (int i = 0; i < MAX_NODES; i++) {
+    path[i] = -1;
+  }
+
+  // Current node
+  int current_node = 0;
+
+  // Set all visited to false
+  for (int i = 0; i < MAX_NODES; i++) {
+    visited[i] = false;
+  }
+
+  // insert starting node into queue
+  queue.push_back(A);
+
+  // While queue not empty IE still nodes to visit
+  while (!queue.empty()) {
+    // Set current from front of queue
+    current_node = queue.front();
+    // Remove front node
+    queue.pop_front();
+
+    // Add nodes that need to be visited
+    for (int i = 0; i < 140; i++) {
+      // If the has not been visited and there is connection
+      // Set that node to visited (its not visited yet)
+      // Then add it to queue visit and pop // Prevents cycles
+      if (!visited[i] && adj[current_node][i] == 1) {
+        visited[i] = true;
+        queue.push_back(i);
+        path[i] = current_node;
+
+        if (i == B) {
+          return true;
+        }
+
+      }
+
+    }
+  }
+  return false;
+}
+
+/*  void AtoA(int city)
+ *
+ *   By Cole Stoltz
+ *  
+ *   Parameters: int
+ *
+ *   Takes in 1 node. Calculates the least amount of connections
+ *   from city A back to city A.
+ *
+ *   Uses a breadth first search from BFS function
+ *   
+ *   Returns: the minimum path a to the destination.
+ */
+void AtoA(int A){
+      // Temp variables
+      int tempB = A;
+
+      // For path tracing the nodes
+      int path[MAX_NODES];
+      stack<int> stack_path;
+      
+      // Call bfs function to check if route possible
+      if(BFS(A, tempB, path)){
+         cout << "\n\nRoute possible -------" << endl;
+        
+        // Add path to stack
+        while(path[tempB] != A)
+        {
+          tempB = path[tempB];
+          stack_path.push(tempB);
+        }
+        
+        // Print initial city
+        cout << testCity[A];
+        // Print path that was pushed to stack
+        while(!stack_path.empty())
+        {
+          cout  << " -> " << testCity[stack_path.top()];
+          stack_path.pop();
+        } 
+        cout << " -> " << testCity[A] << endl << endl;
+        
+      } else{
+          cout << "No route back to city -> " << testCity[A] << endl;
+      }
+}
+
+// END
+
 // Vladimer Purtskhvanidze
 
 void addEdge(int node1, int node2)
@@ -307,10 +422,23 @@ int main()
     }
     if (option == 4)
     {
+
+        // Ignore last input to prevent overflow
+        cin.ignore();
+
+        // Get user input for the city to loop back to
+        cout << "Enter starting city: "; // -------- Start city
+        getline(cin, startCity);
+        cout << endl;
+
+        // Call function
+        AtoA(city[startCity]);
+
     }
     if (option == 5)
     {
-      return 0;
+        cout << "Exiting..." << endl;
+        return 0;
     }
 
     // cout<<"Moscow"<<endl;
