@@ -230,8 +230,8 @@ int main()
     string startCity,cityA,cityB,cityC, EndCity;
     cout << "Select option 1 to calculate routes from A to B" << endl;
     cout << "Select option 2 to calculate routes from A to B through C and D " << endl;
-    cout << "Select option 3 to calculate routes to travel all cities from A and come back" << endl;
-    cout << "Select option 4 to calculate routes to travel From A , B ,C to 1 specific city" << endl;
+    cout << "Select option 3 to calculate rroutes to travel From A , B ,C to 1 specific city" << endl;
+    //cout << "Select option 4 to calculate routes to travel From A , B ,C to 1 specific city" << endl;
     cout << " Select 5 to exit " << endl;
     cin >> option;
 
