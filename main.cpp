@@ -6,19 +6,202 @@
 #include <fstream>
 #include <map>
 #include <regex>
+#include <list>
 
 using namespace std;
+#define MAX_NODES 140
 
 //Cole Schlotz Code here 
- 
+// Used in loops and maximum nodes
 
+// Adjaceny list // Global
+int adj[140][140];
 
+//Cole Stoltz Code here 
+/*  void BFS(int from, int to)
+ *
+ *   By Cole Stoltz
+ *  
+ *   Parameters: int, int, int[]
+ *
+ *   Takes in 2 nodes. Calculates the least amount of connections
+ *   from city A to B.
+ *
+ *   Uses a breadth first search
+ *   
+ *   Returns: the minimum path a to the destination.
+ */
+bool BFS(int A, int B, int path[MAX_NODES]) {
 
+  // Lists
+  bool visited[MAX_NODES];
+  list < int > queue;
 
+  for (int i = 0; i < 140; i++) {
+    path[i] = -1;
+  }
 
+  // Iterator for moving through list
+  list < int > ::iterator it;
+
+  // Current node
+  int current_node = 0;
+
+  // Set all visited to false
+  for (int i = 0; i < MAX_NODES; i++) {
+    visited[i] = false;
+  }
+
+  // Set start node to visited
+  visited[A] = true;
+
+  // insert starting node into queue
+  queue.push_back(A);
+
+  // While queue not empty IE still nodes to visit
+  while (!queue.empty()) {
+    // Set current from front of queue
+    current_node = queue.front();
+    cout << current_node << "--" << endl;
+    // Remove front node
+    queue.pop_front();
+
+    // Add nodes that need to be visited
+    for (int i = 0; i < 140; i++) {
+      // If the has not been visited and there is connection
+      // Set that node to visited (its not visited yet)
+      // Then add it to queue visit and pop // Prevents cycles
+      if (!visited[i] && adj[current_node][i] == 1) {
+        visited[i] = true;
+        queue.push_back(i);
+        path[i] = current_node;
+
+        if (i == B) {
+          return true;
+        }
+
+      }
+
+    }
+  }
+  return false;
+}
+
+/*  void BFS(int from, int to)
+ *
+ *   By Cole Stoltz
+ *  
+ *   Parameters: int, int, int, int
+ *
+ *   Takes in 4 nodes. Calculates the least amount of connections
+ *   from city A to D traveling through city B and C. 
+ *
+ *   Analyzes the path provided by the BFS function
+ *   
+ *   Returns: Prints the path of the connection if there is one.
+ */
+void AtoBtoCtoD(int A, int B, int C, int D){
+  
+  // Path edited by the BFS function
+  int path[MAX_NODES];
+  stack< int > stack_path;
+
+  // Checks for A -> B or if A -> C returned true
+  bool AtoB = false;
+  bool AtoC = false;
+  bool BtoC = false;
+  bool CtoB = false;
+  bool CtoD = false;
+  bool BtoD = false;
+
+  // Temp variables as A and B would be modified
+  int tempB = B;
+  int tempC = C;
+  int tempD = D;
+
+  // Go through each node A->B->C->D or A->C->B->D
+  // Therefore many if statements used
+  // Could have been made more streamlined
+  // Checks for valid A -> B or A -> C
+  if(BFS(A, B, path)){ 
+    AtoB = true;
+    while(path[tempB] != -1){
+      stack_path.push(tempB);
+      tempB = path[tempB];
+    }
+    tempB = B;
+  } else if(BFS(A, C, path) && AtoB == false){
+    AtoC = true;
+    while(path[tempC] != -1){
+      stack_path.push(tempC);
+      tempC = path[tempC];
+    }
+    tempC = C;
+  } else{
+      cout << " | No connection to final city can be made..." << endl;
+    return;
+  }
+
+  // Print if valid
+  cout << A;
+  while(!stack_path.empty()){
+    cout  << " -> " << stack_path.top();
+    stack_path.pop();
+  } 
+
+  // Checks for valid A -> B or A -> C
+  if(BFS(B, C, path)){ // Check a to b or a to c
+    while(path[tempC] != -1){
+      stack_path.push(tempC);
+      tempC = path[tempC];
+    }
+    tempC = C;
+  } else if(BFS(C, B, path) && AtoC == true){
+    CtoB = true;
+    while(path[tempB] != -1){
+      stack_path.push(tempB);
+      tempB = path[tempB];
+    }
+    tempB = B;
+  } else{
+      cout << " | No connection to final city can be made..." << endl;
+    return;
+  }
+  
+  // Print if valid
+  while(!stack_path.empty()){
+    cout  << " -> " << stack_path.top();
+    stack_path.pop();
+  } 
+
+  // Checks for valid A -> B or A -> C
+  if(BFS(C, D, path)){ // Check a to b or a to c
+    while(path[tempD] != -1){
+      stack_path.push(tempD);
+      tempD = path[tempD];
+    }
+    tempD = D;
+  } else if(BFS(B, D, path) && CtoB == true){
+    while(path[tempD] != -1){
+      stack_path.push(tempD);
+      tempD = path[tempD];
+    }
+    tempD = D;
+  } else{
+      cout << " | No connection can be made..." << endl;
+    return;
+  }
+
+  // Print if valid
+  while(!stack_path.empty()){
+    cout  << " -> " << stack_path.top();
+    stack_path.pop();
+  } 
+  cout << endl;
+
+}
 
 //END 
-int adj[140][140];
 
 // Vladimer Purtskhvanidze 
 
@@ -85,6 +268,12 @@ int main () {
   fstream cityFile;
   fstream filghtFile;
   regex self_regex("From");
+ 
+   // City variables --- Maps to an int or "node"
+  string startCity;
+  string endCity;
+  string cityB;
+  string cityC;
   
   int node1,node2;
   cityFile.open("city.name",ios::in);
@@ -173,13 +362,34 @@ int main () {
     }
     if(option == 2){
 
-      /// adj[][] we have this matrix ready I am still working on first function 
-      //adj['Casablanca, Morocco']['Brussels, Belgium] will display if they adjacent 1 means there is direct flight 0 means nmo flight
-      // choose any 2 function
-      // Let me know if any question 
+      
+      // Ignore last input to prevent overflow
+      cin.ignore();
+
+      // Get user input for the 4 cities
+      cout << "Enter starting city: "; // -------- Start city
+      getline(cin, startCity);
+      cout << endl;
+
+      cout << "Enter ending city: "; // ---------- End city
+      getline(cin, endCity);
+      cout << endl;
+
+      cout << "Enter intermediate city 1: "; // -- City B
+      getline(cin, cityB);
+      cout << endl;
+
+      cout << "Enter intermediate city 2: "; // -- City C
+      getline(cin, cityC);
+      cout << endl;
+
+      AtoBtoCtoD(city[startCity], city[cityB], city[cityC], city[endCity]);
+
       
     }
     if(option == 3){
+      int path[MAX_NODES];
+      
       
     }
     if(option == 4){
