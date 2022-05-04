@@ -228,6 +228,7 @@ int main()
 
     int option;
     string startCity,cityA,cityB,cityC, EndCity;
+    
     cout << "Select option 1 to calculate routes from A to B" << endl;
     cout << "Select option 2 to calculate routes from A to B through C and D " << endl;
     cout << "Select option 3 to calculate rroutes to travel From A , B ,C to 1 specific city" << endl;
@@ -246,7 +247,7 @@ int main()
       cout << "Enter End" << endl;
       getline(cin, EndCity);
       int endCityToInt = city[EndCity];
-      int x = 10;
+      int x = 139;
       canfly(startCity, EndCity, x);
       // fromAtoB(startCityToInt, endCityToInt);
     }
@@ -266,7 +267,7 @@ int main()
       cout << "city C" << endl;
       getline(cin, cityC);
       int endCityToInt = city[cityB];
-      int x = 10;
+      int x = 139;
      // canfly(startCity, EndCity, x);
       canfly(startCity, cityB, x);
       canfly(cityB, cityC, x);
@@ -296,7 +297,7 @@ int main()
       cout << "Enter Destination" << endl;
       getline(cin, EndCity);
       int endCityToInt = city[cityB];
-      int x = 10;
+      int x = 139;
      // canfly(startCity, EndCity, x);
       canfly(cityA, EndCity, x);
       canfly(cityB, EndCity, x);
